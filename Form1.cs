@@ -46,6 +46,7 @@ namespace Dashboard_Cassa___Ordini
                 string rigaSelezionata = listaOggetti[count];
                 string[] parti = rigaSelezionata.Split('-');
                 string partePrezzo = parti[1].Trim().Replace("€", "");
+
                 double prezzoDaRimuovere = double.Parse(partePrezzo);
                 prezzoTotale = prezzoTotale - prezzoDaRimuovere;
                 labelImportoCassa.Text = "€ " + prezzoTotale;
@@ -53,7 +54,25 @@ namespace Dashboard_Cassa___Ordini
                 Aggiorna();
             }
         }
+        private void buttonEmettiScontrino_Click(object sender, EventArgs e)
+        {
+            string dataOra = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            using (StreamWriter sw = new StreamWriter("scontrini.csv", true))
+            {
+                Console.WriteLine("scontrino :" + dataOra);
+                foreach (string s in listaOggetti)
+                {
+                    sw.WriteLine(s);
+                }
+                sw.WriteLine("totale :" + prezzoTotale);
+            }
+            listaOggetti.Clear();
+            prezzoTotale = 0;
+            labelImportoCassa.Text = "€ 0";
+            Aggiorna();
+        }
 
-        
+
+
     }
 }
